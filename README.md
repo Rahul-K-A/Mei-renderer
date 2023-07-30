@@ -12,10 +12,12 @@
 </br>
 <h2>Build instructions</h2>
 <p>On Linux, you can use the following commands</p>
-<p>mkdir build</p>
-<p>cd build</p>
-<p>cmake ..</p>
-<p>make</p>
-<p>mkdir build</p>
-<p>./MeiRenderer<p>
+```
+mkdir build
+cd build
+cmake ..
+make
+./MeiRenderer
+```
+
 
