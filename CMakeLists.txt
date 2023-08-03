@@ -3,8 +3,8 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 project(MeiRenderer)
 
-# Add .lib files
-link_directories(${CMAKE_SOURCE_DIR}/lib)
+#Add external deps
+add_subdirectory(deps)
 
 # Add source files
 file(GLOB_RECURSE SOURCE_FILES 
@@ -13,8 +13,8 @@ file(GLOB_RECURSE SOURCE_FILES
 	
 # Add header files
 file(GLOB_RECURSE HEADER_FILES 
-	${CMAKE_SOURCE_DIR}/src/*.h
-	${CMAKE_SOURCE_DIR}/src/*.hpp)
+	${CMAKE_SOURCE_DIR}/include/*.h
+	${CMAKE_SOURCE_DIR}/include/*.hpp)
 
 # Configure assets header file
 # configure_file(src/helpers/RootDir.h.in src/helpers/RootDir.h)
@@ -45,11 +45,6 @@ find_package(OpenGL REQUIRED)
 # # STB_IMAGE
 # add_library(STB_IMAGE "thirdparty/stb_image.cpp")
 
-# GLAD
-add_library(GLAD "deps/glad/src/glad.c")
-
-# Put all libraries into a variable
-set(LIBS ${glfw3_LIBRARY} ${OPENGL_LIBRARY} ) #GLAD ${CMAKE_DL_LIBS} ${ASSIMP_LIBRARY} STB_IMAGE)
 
 # Define the include DIRs
 include_directories(
@@ -59,6 +54,6 @@ include_directories(
 )
 
 # Define the link libraries
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} -lglfw -lGL -lX11
-    -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread)
+target_link_libraries(${PROJECT_NAME} PUBLIC GLAD -lglfw -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread)
+
 
