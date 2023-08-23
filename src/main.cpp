@@ -5,6 +5,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0,0, width, height);
 }
 
+//Callback function for closing window when pressing ESC
+void process_input(GLFWwindow* window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, 1);
+    }
+}
+
 int main()
 {
     glfwInit();
@@ -14,7 +23,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //Create Window 800x600
-    GLFWwindow* window = glfwCreateWindow(800,600,"My Window",NULL,NULL);
+    GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH,WINDOW_HEIGHT,"My Window",NULL,NULL);
     if(window == NULL)
     {
         std::cout<<"Failed to create window!\n";
@@ -41,7 +50,10 @@ int main()
     while(!glfwWindowShouldClose(window))
     {
         glfwSwapBuffers(window);
-        glfwPollEvents();    
+        glfwPollEvents(); 
+        process_input(window);  
+        glClearColor(240/255.f,0.5f,0.5f,1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
     }  
     return 0;
 }
