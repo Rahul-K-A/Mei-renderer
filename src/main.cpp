@@ -165,6 +165,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     ShaderProgram sProgram(vShader,fShader);
     createSquare();
+
     //Loop indefinitely
     while(!glfwWindowShouldClose(window))
     {
@@ -174,7 +175,7 @@ int main()
         float rV = cos(tVal)/2.f + 0.5f;
         float bV = tan(tVal)/2.f + 0.5f;
         int vertexClrLoc = sProgram.getUniformLocation("clr");
-        sProgram.useShaderProgram();
+        sProgram.use();
         glUniform4f(vertexClrLoc, rV, gV, bV, 1.f);
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 6);

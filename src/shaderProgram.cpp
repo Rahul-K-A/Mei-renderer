@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-ShaderProgram::ShaderProgram(std::string filePathVertex, std::string filePathFragment)
+ShaderProgram::ShaderProgram(std::string filePathVertex, std::string filePathFragment): shaderStatus(0), vShader(0), fShader(0), PID(0), isReady(GL_TRUE), infoLog(nullptr)
 {
     std::ifstream fileHandler;
     std::string vshaderCode, fshaderCode;
@@ -32,7 +32,7 @@ ShaderProgram::ShaderProgram(std::string filePathVertex, std::string filePathFra
         std::cerr << "ERROR::COULD NOT READ FRAGMENT SHADER! CHECK PATH TO SHADER" << std::endl;
     }
 
-    infoLog = new char(512);
+    infoLog = new char[512];
     vShader = createShader(vshaderCode.c_str(), GL_VERTEX_SHADER);
     fShader = createShader(fshaderCode.c_str(), GL_FRAGMENT_SHADER);
     PID = createShaderProgram();
@@ -43,7 +43,7 @@ ShaderProgram::ShaderProgram(std::string filePathVertex, std::string filePathFra
 
 ShaderProgram::ShaderProgram(const char* vertexShaderCode, const char* fragmentShaderCode ): shaderStatus(0), vShader(0), fShader(0), PID(0), isReady(GL_TRUE), infoLog(nullptr)
 {
-    infoLog = new char(512);
+    infoLog = new char[512];
     vShader = createShader(vertexShaderCode, GL_VERTEX_SHADER);
     fShader = createShader(fragmentShaderCode, GL_FRAGMENT_SHADER);
     PID = createShaderProgram();
@@ -90,7 +90,7 @@ GLint ShaderProgram::createShaderProgram()
 }
 
 
-void ShaderProgram::useShaderProgram()
+void ShaderProgram::use()
 {
     glUseProgram(PID);
 }
@@ -99,6 +99,25 @@ GLint ShaderProgram::getUniformLocation(const char* uniformName){
     return glGetUniformLocation(PID, uniformName);
 }
 
+void ShaderProgram::setBool(const std::string &name, bool value) const
+{         
+    glUniform1i(glGetUniformLocation(PID, name.c_str()), (int)value); 
+}
+        
+void ShaderProgram::setInt(const std::string &name, int value) const
+{ 
+    glUniform1i(glGetUniformLocation(PID, name.c_str()), value); 
+}
+
+void ShaderProgram::setFloat(const std::string &name, float value) const
+{ 
+    glUniform1f(glGetUniformLocation(PID, name.c_str()), value); 
+}
+
+void ShaderProgram::stop()
+{
+    glUseProgram(0);
+}
 
 
 ShaderProgram::~ShaderProgram()
