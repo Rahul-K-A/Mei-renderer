@@ -4,18 +4,17 @@ GLuint vertexShader, fragShader, VAO, VBO, EBO, shaderProgram;
 const char* vShader = R"gl(
 #version 400 
 layout (location = 0) in vec3 point;
-out vec4 clr;
 void main()
 {
     gl_Position = vec4(point, 1.0);
-    clr = gl_Position;
 }
 )gl";
 
 const char* fShader = R"gl(
 #version 400 
-in vec4 clr;
 out vec4 fragColor;
+
+uniform vec4 clr;
 void main()
 {
     fragColor = clr;
@@ -52,11 +51,7 @@ void createSquare()
         0, 1, 2,
         2, 1 ,3
     };
-    
-    for(uint8_t i = 0; i < 12; i++)
-    {
-        sPoints[i]*= 2.f;
-    }
+
 
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
@@ -221,7 +216,13 @@ int main()
     while(!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+        float tVal = glfwGetTime();
+        float gV = sin(tVal)/2.f + 0.5f;
+        float rV = cos(tVal)/2.f + 0.5f;
+        float bV = tan(tVal)/2.f + 0.5f;
+        int vertexClrLoc = glGetUniformLocation(shaderProgram, "clr");
         glUseProgram(shaderProgram);
+        glUniform4f(vertexClrLoc, rV, gV, bV, 1.f);
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  
