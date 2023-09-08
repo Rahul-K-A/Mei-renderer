@@ -1,6 +1,7 @@
 #include "mei-common.h"
+#include "shaderProgram.h"
 
-GLuint vertexShader, fragShader, VAO, VBO, EBO, shaderProgram;
+GLuint VAO, VBO, EBO;
 const char* vShader = R"gl(
 #version 400 
 layout (location = 0) in vec3 point;
@@ -130,53 +131,6 @@ void createTriangle1()
     glEnableVertexAttribArray(0);
 }
 
-void createShaders()
-{
-
-    GLint success;
-    char infoLog[512];
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    // index of shader, number of strings being passed, address to string array, address to length array (only needed if passing multiple strings)
-    glShaderSource(vertexShader, 1, &vShader, NULL );
-
-    //Compile shader
-    glCompileShader(vertexShader);
-
-    //Get status of shader
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    glShaderSource(fragShader, 1, &fShader, NULL );
-    //Compile shader
-    glCompileShader(fragShader);
-
-    //Get status of shader
-    glGetShaderiv(fragShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragShader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    shaderProgram = glCreateProgram();
-
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING FAILED\n" << infoLog << std::endl;     
-    }
-
-    std::cout<<"Created shaders\n";
-}
-
 
 int main()
 {
@@ -209,8 +163,7 @@ int main()
 
     //Set callback for resize
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    createShaders();
-
+    ShaderProgram sProgram(vShader,fShader);
     createSquare();
     //Loop indefinitely
     while(!glfwWindowShouldClose(window))
@@ -220,8 +173,8 @@ int main()
         float gV = sin(tVal)/2.f + 0.5f;
         float rV = cos(tVal)/2.f + 0.5f;
         float bV = tan(tVal)/2.f + 0.5f;
-        int vertexClrLoc = glGetUniformLocation(shaderProgram, "clr");
-        glUseProgram(shaderProgram);
+        int vertexClrLoc = sProgram.getUniformLocation("clr");
+        sProgram.useShaderProgram();
         glUniform4f(vertexClrLoc, rV, gV, bV, 1.f);
         glBindVertexArray(VAO);
         //glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -232,7 +185,5 @@ int main()
 
 
     }  
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragShader);  
     return 0;
 }
