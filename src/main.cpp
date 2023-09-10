@@ -134,68 +134,6 @@ void createSquare()
     
 }
 
-void createTriangle()
-{
-    // ALWAYS ENTER POINTS IN COUNTER CLOCKWISE ORDER
-    float triPoints[] = {
-    -0.5f, -0.5f, 0.0f,     //pos1
-     1.f, 0.f, 0.0f,     //clr1
-     0.5f,  -0.5f, 0.0f,  //pos2
-     0.f,  1.f, 0.0f,  //clr2
-     0.0f,  0.5f, 0.0f, //pos3
-     0.0f,  0.f, 1.0f //clr3
-    };  
-
-    float colors[] = {
-    };  
-    //VBO - raw data sent to GPU, VAO - what is the data being sent and in what order 
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    //Bind VBO to Opengl State machine
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    //Copy data to GPU, GL_STATIC_DRAW means we load data once and use it to draw many times
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triPoints), triPoints, GL_STATIC_DRAW);
-
-    //Tell GPU what format the VBO data is in
-    //Args attrib value (aka what is the layout value for the attribute that you set in shader, size of data in consideration (3 because we send a vector of 3 points), datatype, bNormalised, stride(aka how far away is the next data for the attribute), offset to first data of attribute in bytes)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)) );
-
-    //Enable 0th attrib (positon) of VAO
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
-}
-
-
-void createTriangle1()
-{
-    // ALWAYS ENTER POINTS IN COUNTER CLOCKWISE ORDER
-    float triPoints[] = {
-    -1.f, -1.f, 0.0f,
-     1.f,  -1.f, 0.0f,
-     0.0f,  1.f, 0.0f
-    };  
-    //VBO - raw data sent to GPU, VAO - what is the data being sent and in what order 
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    //Bind VBO to Opengl State machine
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    //Copy data to GPU, GL_STATIC_DRAW means we load data once and use it to draw many times
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triPoints), triPoints, GL_STATIC_DRAW);
-
-    //Tell GPU what format the VBO data is in
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    //Enable 0th attrib (positon) of VAO
-    glEnableVertexAttribArray(0);
-}
-
 
 int main()
 {
