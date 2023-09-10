@@ -9,3 +9,5 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
+
+using namespace glm;

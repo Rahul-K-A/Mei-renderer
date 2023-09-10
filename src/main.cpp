@@ -12,6 +12,7 @@ layout (location = 2) in vec2 aTexCoord;
 out vec3 ourColor;
 out vec2 TexCoord;
 
+uniform mat4 transform;
 void main()
 {
 	gl_Position = vec4(aPos, 1.0);
@@ -168,10 +169,12 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     ShaderProgram sProgram(vShader,fShader);
     createSquare();
+
     sProgram.use();
     sProgram.setInt("texture1", 0);
     sProgram.setInt("texture2", 1);
-
+    ShaderProgram::stop();
+    
 
 
     //Loop indefinitely
@@ -190,7 +193,6 @@ int main()
 
         sProgram.use();
         glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  
         glfwSwapBuffers(window);
         glfwPollEvents(); 
