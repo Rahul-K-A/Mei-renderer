@@ -15,7 +15,7 @@ out vec2 TexCoord;
 uniform mat4 transform;
 void main()
 {
-	gl_Position = vec4(aPos, 1.0);
+	gl_Position = transform * vec4(aPos, 0.75f);
 	ourColor = aColor;
 	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 }
@@ -35,7 +35,7 @@ uniform sampler2D texture2;
 void main()
 {
 	// linearly interpolate between both textures (80% container, 20% awesomeface)
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.5);
+	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.1)* vec4(ourColor, 0.2);;
 }
 )gl";
 
@@ -174,24 +174,25 @@ int main()
     sProgram.setInt("texture1", 0);
     sProgram.setInt("texture2", 1);
     ShaderProgram::stop();
-    
 
 
     //Loop indefinitely
     while(!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        float tVal = glfwGetTime();
-        float gV = sin(tVal)/2.f + 0.5f;
-        float rV = cos(tVal)/2.f + 0.5f;
-        float bV = tan(tVal)/2.f + 0.5f;
-
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
+        mat4 transform(1.f);
+
+
         sProgram.use();
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f)); // switched the order
+        transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f)); // switched the order   
+        GLint uLoc = sProgram.getUniformLocation("transform");
+        glUniformMatrix4fv(uLoc, 1, GL_FALSE, value_ptr(transform));
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);  
         glfwSwapBuffers(window);
