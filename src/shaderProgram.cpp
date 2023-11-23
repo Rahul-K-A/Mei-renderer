@@ -24,7 +24,7 @@ ShaderProgram::ShaderProgram(std::string filePathVertex, std::string filePathFra
     {
         std::ostringstream ss2;
         ss2 << fileHandler.rdbuf();
-        vshaderCode = ss2.str();
+        fshaderCode = ss2.str();
         ss2.clear();
         fileHandler.close();
     }
