@@ -8,7 +8,7 @@
 </br>
 <h2>Installation instructions</h1>
 <p>On Linux, run the below command</p>
-<p>sudo apt install cmake xorg-dev libglu1-mesa-dev libglfw3-dev libglfw3</p>
+<p>sudo apt install cmake xorg-dev libglu1-mesa-dev libglfw3-dev libglfw3 libglm-dev</p>
 </br>
 <h2>Build instructions</h2>
 <p>On Linux, you can use the following commands</p>
