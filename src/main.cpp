@@ -3,42 +3,6 @@
 #include "shaderProgram.h"
 
 GLuint VAO, VBO, EBO, texture1, texture2;
-const char* vShader = R"gl(
-#version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aColor;
-layout (location = 2) in vec2 aTexCoord;
-
-out vec3 ourColor;
-out vec2 TexCoord;
-
-uniform mat4 transform;
-void main()
-{
-	gl_Position = transform * vec4(aPos, 0.75f);
-	ourColor = aColor;
-	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
-}
-)gl";
-
-const char* fShader = R"gl(
-#version 330 core
-out vec4 FragColor;
-
-in vec3 ourColor;
-in vec2 TexCoord;
-
-// texture samplers
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-
-void main()
-{
-	// linearly interpolate between both textures (80% container, 20% awesomeface)
-	FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.1)* vec4(ourColor, 0.2);;
-}
-)gl";
-
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -64,6 +28,7 @@ void createSquare()
         -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
         -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
     };
+
     unsigned int indices[] = {  
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
@@ -121,7 +86,7 @@ void createSquare()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     stbi_set_flip_vertically_on_load(true);  
-    data = stbi_load("../Resources/Textures/awesomeface.png",&width, &height, &nrChannels, 0);
+    data = stbi_load("../Resources/Textures/awesomeface.png", &width, &height, &nrChannels, 0);
     
     if(data)
     {
@@ -167,7 +132,7 @@ int main()
 
     //Set callback for resize
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    ShaderProgram sProgram(vShader,fShader);
+    ShaderProgram sProgram(std::string("../Resources/Shaders/shader.vert"), std::string("../Resources/Shaders/shader.frag"));
     createSquare();
 
     sProgram.use();
