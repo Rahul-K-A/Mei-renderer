@@ -4,7 +4,7 @@ mei: Truth, reality
 ---
 An improved version of my previous OpenGL Renderer
 Now with GUI, PBR and more goodies!
-CMakeLists.txt was adopted from [here]("https://github.com/Shot511/OpenGLSampleCmake/tree/master")
+CMakeLists.txt was adopted from [here](https://github.com/Shot511/OpenGLSampleCmake/tree/master)
 
 ## Installation instructions
 On Linux, run the below command to install all the required dependencies
